@@ -52,7 +52,7 @@ export function FilterBottomSheet({
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 bg-black/40 z-50" onClick={onClose}>
+    <div className="fixed inset-0 bg-black/40 z-[80]" onClick={onClose}>
       <div 
         className="absolute bottom-0 left-0 right-0 bg-white rounded-t-[20px] max-h-[85vh] overflow-y-auto"
         onClick={(e) => e.stopPropagation()}
@@ -250,7 +250,7 @@ export function FilterBottomSheet({
         </div>
 
         {/* Bottom Button */}
-        <div className="sticky bottom-0 bg-white border-t border-[#F0EBE3] p-4">
+        <div className="sticky bottom-0 bg-white border-t border-[#F0EBE3] px-4 pt-4 pb-[calc(1rem+env(safe-area-inset-bottom))]">
           <button
             onClick={onShowResults}
             className="w-full h-[52px] bg-[#E8603C] text-white rounded-xl text-[16px] font-semibold hover:bg-[#D55534] transition-colors"

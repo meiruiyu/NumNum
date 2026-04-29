@@ -1,0 +1,16 @@
+services:
+  - type: web
+    name: numnum-api
+    env: node
+    plan: free
+    buildCommand: npm ci
+    startCommand: npm run start
+    autoDeploy: true
+    envVars:
+      - key: NODE_ENV
+        value: production
+      # Comma-separated list of allowed frontend origins, e.g.
+      # https://numnum.vercel.app,https://numnum-git-main.vercel.app
+      - key: CORS_ORIGIN
+        value: ""
+

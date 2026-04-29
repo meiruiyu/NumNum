@@ -1,0 +1,192 @@
+BUG FIX: On the Home screen and all other screens,
+text inside restaurant cards is being cut off or
+obscured by other elements. Find and fix every
+instance of this problem throughout the entire app.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+PROBLEM DESCRIPTION
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+As visible in the Home screen "Top Picks Near You"
+section:
+- Restaurant name "Flushing Hot Pot" is partially
+  visible but the bottom of the text is cut off
+- "Chinese · Flushing, Queens" line is cut off
+  at the right edge
+- The card's info section does not have enough
+  height or padding to fully display all text lines
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+ROOT CAUSES TO FIX
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+CAUSE A — Card info section height too small:
+The white info section below the photo in Top Picks
+cards does not have enough fixed height to contain
+all text lines without clipping.
+
+CAUSE B — Text container width too narrow:
+Text lines extend to the right edge of the card
+and get clipped because the container width
+is not properly constrained.
+
+CAUSE C — Missing bottom padding:
+The last line of text in the card has no bottom
+padding, causing it to sit flush against the
+card bottom edge and appear cut off.
+
+CAUSE D — Overflow not set to hidden with ellipsis:
+Text that exceeds its container wraps or clips
+without an ellipsis, making it look broken.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+FIX — Top Picks Near You cards (Home screen)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Each Top Picks card info section (white area
+below the photo):
+
+  Height: 88px minimum
+    (tall enough for 4 lines of content)
+  Padding: 12px top, 12px bottom, 14px left,
+    14px right
+  Overflow: hidden
+  Width: exactly matches card width (no overflow)
+
+Content inside info section (4 lines):
+
+  Line 1 — Restaurant name:
+    Font: 15px, weight 600, #2C1A0E
+    Max width: card width minus 28px (14px each side)
+    white-space: nowrap
+    overflow: hidden
+    text-overflow: ellipsis
+    Margin-bottom: 4px
+
+  Line 2 — Cuisine tag pill:
+    Height: 22px
+    Font: 11px, weight 500
+    Display: inline-block
+    Margin-bottom: 6px
+
+  Line 3 — Rating + Price:
+    Font: 12px, weight 500, #4A3728
+    white-space: nowrap
+    overflow: hidden
+    text-overflow: ellipsis
+    Margin-bottom: 4px
+
+  Line 4 — Highlight text:
+    Font: 12px, weight 400, #8A8078
+    white-space: nowrap
+    overflow: hidden
+    text-overflow: ellipsis
+    No margin-bottom (bottom padding handles spacing)
+
+  Total content height:
+    Line 1: 20px + 4px margin
+    Line 2: 22px + 6px margin
+    Line 3: 16px + 4px margin
+    Line 4: 16px
+    = 88px content
+    + 12px top padding + 12px bottom padding
+    = minimum 112px for info section
+
+  Update card info section height to: 112px
+  Update total card height to:
+    Photo (160px) + Info (112px) = 272px total
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+FIX — All other card types (global)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Apply these rules to EVERY card type on
+EVERY screen in the entire app:
+
+RULE 1 — All text containers must have
+defined max-width equal to their parent
+container minus horizontal padding.
+No text container has undefined/auto width
+that allows overflow.
+
+RULE 2 — All single-line text must have:
+  white-space: nowrap
+  overflow: hidden
+  text-overflow: ellipsis
+
+RULE 3 — All multi-line text must have:
+  overflow: hidden
+  max lines: 2
+  display: -webkit-box (or equivalent)
+  line clamp: 2
+  text-overflow: ellipsis
+
+RULE 4 — All card containers must have:
+  overflow: hidden
+  No child element may extend outside the
+  card boundary
+
+RULE 5 — Bottom padding rule:
+  Every card info section must have minimum
+  10px bottom padding so the last text line
+  is never flush against the card edge.
+
+RULE 6 — Right edge padding rule:
+  Every card info section must have minimum
+  12px right padding so text never touches
+  the right edge of the card.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+SCREENS TO CHECK AND FIX
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Check every card on every screen:
+
+01. Home — Top Picks Near You horizontal cards
+02. Home — Friends Space feed preview cards
+03. Search Results — restaurant list rows
+04. NYC Rankings Detail — restaurant rows
+05. Recommended Dishes View All — dish rows
+06. Restaurant Detail — Menu tab dish rows
+07. My Lists — Wishlist rows
+08. My Lists — Been There rows
+09. My Lists — My Collections grid cards
+10. My Lists — Friends Picks rows
+11. Friends Space — Feed activity cards
+12. Friends Space — Friends list rows
+13. Friends Space — Messages list rows
+14. Profile — Reward cards
+15. Profile — Achievement badge cells
+16. Write a Review — any card previews
+
+For each screen, verify:
+  [ ] No text line is cut off vertically
+  [ ] No text line is cut off horizontally
+  [ ] No text bleeds outside its card boundary
+  [ ] Bottom of card has visible padding below
+      the last text line
+  [ ] Right side of card has visible padding
+      before the right card edge
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+SPECIFIC CHECK — Home Top Picks cards
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+After applying the fix, the Home screen
+Top Picks cards must display fully:
+
+Card 1 "Flushing Hot Pot":
+  ✓ "Flushing Hot Pot" — fully visible, not cut
+  ✓ "Chinese" tag pill — fully visible
+  ✓ "★ 4.7 (3,284) · $$" — fully visible
+  ✓ "Best Xiaolongbao in Manhattan" — visible
+    or truncated with ellipsis (not hard-cut)
+  ✓ Visible white space below last line
+  ✓ No text touches right edge of card
+
+Same verification applies to all other
+restaurant cards visible on the Home screen.
+
+No other visual design changes.
+Only fix text clipping, container heights,
+padding, and overflow behavior.

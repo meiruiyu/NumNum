@@ -1,0 +1,18 @@
+@import './fonts.css';
+@import './tailwind.css';
+@import './theme.css';
+
+body {
+  font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Custom warm shadow for cards */
+.card-shadow {
+  box-shadow: 0 2px 12px rgba(232, 96, 60, 0.08), 0 1px 3px rgba(44, 26, 14, 0.06);
+}
+
+.card-shadow-hover {
+  box-shadow: 0 4px 20px rgba(232, 96, 60, 0.12), 0 2px 8px rgba(44, 26, 14, 0.08);
+}
